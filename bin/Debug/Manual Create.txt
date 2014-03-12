@@ -1,0 +1,180 @@
+/****** Object:  StoredProcedure [dbo].[Parallel_Declare]    Script Date: 09/16/2008 11:24:22 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_Declare]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_Declare]
+GO
+/****** Object:  StoredProcedure [dbo].[Parallel_UseTransaction]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_UseTransaction]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_UseTransaction]
+GO
+/****** Object:  StoredProcedure [dbo].[Parallel_SetOption_CommandTimeout]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_SetOption_CommandTimeout]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_SetOption_CommandTimeout]
+GO
+/****** Object:  StoredProcedure [dbo].[Parallel_SetOption_MaxThreads]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_SetOption_MaxThreads]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_SetOption_MaxThreads]
+GO
+/****** Object:  StoredProcedure [dbo].[Parallel_AddSql]    Script Date: 09/16/2008 11:24:22 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_AddSql]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_AddSql]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_AddSqlBatch]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_AddSqlBatch]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_AddStoredProcedureParameter]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_AddStoredProcedureParameter]
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_AddStoredProcedure]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_AddStoredProcedure]
+GO
+
+/****** Object:  StoredProcedure [dbo].[Parallel_Execute]    Script Date: 09/16/2008 11:24:22 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_Execute]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[Parallel_Execute]
+GO
+/****** Object:  UserDefinedFunction [dbo].[Parallel_GetExecutionResult]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_GetExecutionResult]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[Parallel_GetExecutionResult]
+GO
+/****** Object:  UserDefinedFunction [dbo].[Parallel_GetErrorMessage]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Parallel_GetErrorMessage]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[Parallel_GetErrorMessage]
+GO
+
+/****** Object:  SqlAssembly [SqlCLRParallel]    Script Date: 09/16/2008 11:24:23 ******/
+IF  EXISTS (SELECT * FROM sys.assemblies asms WHERE asms.name = N'SqlCLRParallel')
+DROP ASSEMBLY [SqlCLRParallel]
+GO
+
+CREATE ASSEMBLY SqlCLRParallel FROM 'C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\bin\Debug\SqlCLRParallel.dll'
+WITH PERMISSION_SET = UNSAFE;
+
+GO
+
+CREATE FUNCTION [dbo].[Parallel_GetErrorMessage]
+( )
+RETURNS NVARCHAR (MAX)
+AS
+ EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_GetErrorMessage]
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_GetExecutionResult]...';
+
+
+GO
+CREATE FUNCTION [dbo].[Parallel_GetExecutionResult]
+( )
+RETURNS 
+     TABLE (
+        [key_s]       NVARCHAR (100) NULL,
+        [success_f]   BIT            NULL,
+        [run_time_ms] INT            NULL,
+        [error_s]     NVARCHAR (MAX) NULL,
+        [error_stack] NVARCHAR (MAX) NULL,
+        [output]      NVARCHAR (MAX) NULL)
+AS
+ EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_GetExecutionResult]
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_Declare]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_Declare]
+@name NVARCHAR (50)
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_Declare]
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_UseTransaction]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_UseTransaction]
+@mode NVARCHAR (20),
+@seperatedTransaction BIT
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_UseTransaction]
+
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_SetOption_CommandTimeout]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_SetOption_CommandTimeout]
+@commandTimeout INT
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_SetOption_CommandTimeout]
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_SetOption_MaxThreads]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_SetOption_MaxThreads]
+@maxThreads INT
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_SetOption_MaxThreads]
+
+
+GO
+PRINT N'Creating [dbo].[Parallel_AddSql]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_AddSql]
+@key NVARCHAR (128), @sql NVARCHAR (MAX)
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_AddSql]
+
+GO
+
+PRINT N'Creating [dbo].[Parallel_AddStoredProcedureParameter]...';
+
+
+GO
+
+CREATE PROCEDURE [dbo].[Parallel_AddStoredProcedureParameter]
+@storedProcedureKey NVARCHAR (128), 
+@parameterName NVARCHAR (128),
+@sqlDatatype NVARCHAR (128),
+@parameterValues NVARCHAR (MAX),
+@isOutput BIT
+
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_AddStoredProcedureParameter]
+
+GO
+PRINT N'Creating [dbo].[Parallel_AddStoredProcedure]...';
+GO
+CREATE PROCEDURE [dbo].[Parallel_AddStoredProcedure]
+@storedProcedureKey NVARCHAR (128), 
+@commandText NVARCHAR (MAX)
+
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_AddStoredProcedure]
+
+GO
+
+PRINT N'Creating [dbo].[Parallel_AddSqlBatch]...';
+GO
+CREATE PROCEDURE [dbo].[Parallel_AddSqlBatch]
+@keyprefix NVARCHAR (128), 
+@sql NVARCHAR (MAX),
+@parameter NVARCHAR (128),
+@parameterValues NVARCHAR (MAX)
+
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_AddSqlBatch]
+
+GO
+
+PRINT N'Creating [dbo].[Parallel_Execute]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[Parallel_Execute]
+AS EXTERNAL NAME [SqlCLRParallel].[StoredProcedures].[Parallel_Execute]
+
+GO

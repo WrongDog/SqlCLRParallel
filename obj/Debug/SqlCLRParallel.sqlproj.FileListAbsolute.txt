@@ -1,0 +1,9 @@
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\bin\Debug\SqlCLRParallel.dacpac
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\bin\Debug\SqlCLRParallel.dll
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\bin\Debug\SqlCLRParallel.pdb
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\SqlCLRParallel.dll
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\SqlCLRParallel.pdb
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\Model.xml
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\refactor.xml
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\postdeploy.sql
+C:\Users\youy\Documents\Visual Studio 2013\Projects\SqlCLRParallel\obj\Debug\predeploy.sql
